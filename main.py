@@ -6,6 +6,8 @@ iam = boto3.client("iam")
 userList = []
 userAccountInfo = [['User', 'Date Created', 'Password Last Used']] 
 accessKeyInfo = [['User', 'Access Key ID', 'Status', 'Date Created', 'Last Used']]
+consoleAuditFileName = "console-access-audit.csv"
+programAuditFIleName = "programmatic-access-audit.csv"
 
 # Get list of users
 paginator = iam.get_paginator('list_users')
@@ -39,18 +41,18 @@ for item in userList:
             accessKeyInfo.append(newEntry)
 
 # Create CSV's
-if os.path.exists("console-access-audit.csv"):
-    os.remove("console-access-audit.csv")
+if os.path.exists(consoleAuditFileName):
+    os.remove(consoleAuditFileName)
 
-if os.path.exists("programmatic-access-audit.csv"):
-    os.remove("programmatic-access-audit.csv")
+if os.path.exists(programAuditFIleName):
+    os.remove(programAuditFIleName)
 
 # Console Access CSV
-with open("console-access-audit.csv", 'w', newline='') as consoleFile:
+with open(consoleAuditFileName, 'w', newline='') as consoleFile:
     writer = csv.writer(consoleFile)
     writer.writerows(userAccountInfo)
 
 # CLI / Programmatic Access CSV
-with open("programmatic-access-audit.csv", 'w', newline='') as accessKeyFile:
+with open(programAuditFIleName, 'w', newline='') as accessKeyFile:
     writer = csv.writer(accessKeyFile)
     writer.writerows(accessKeyInfo)
